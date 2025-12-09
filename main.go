@@ -20,7 +20,7 @@ func main() {
 	case "invoice":
 		err = cmd.RunInvoice(os.Args[2:])
 	case "list":
-		err = runList()
+		err = cmd.RunList(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", os.Args[1])
 		printUsage()
@@ -39,10 +39,6 @@ func printUsage() {
 	fmt.Println("Commands:")
 	fmt.Println("  init                              Initialize ~/.simplebill/ directory")
 	fmt.Println("  invoice <customer> <product:qty>  Generate an invoice")
-	fmt.Println("  list                              List all invoices")
+	fmt.Println("  list [invoices|customers|products|config]")
 }
 
-func runList() error {
-	fmt.Println("list command not implemented")
-	return nil
-}
