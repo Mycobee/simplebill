@@ -65,6 +65,10 @@ sudo apt install wkhtmltopdf
 sudo dnf install wkhtmltopdf
 ```
 
+## Contributing
+
+Contributions welcome. Please reach out before spending time on a feature so we're aligned: rob@ouzelsoftware.com
+
 ## License
 
 GPL-3.0
