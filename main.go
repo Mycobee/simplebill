@@ -18,7 +18,7 @@ func main() {
 	case "init":
 		err = cmd.RunInit()
 	case "invoice":
-		err = runInvoice(os.Args[2:])
+		err = cmd.RunInvoice(os.Args[2:])
 	case "list":
 		err = runList()
 	default:
@@ -40,11 +40,6 @@ func printUsage() {
 	fmt.Println("  init                              Initialize ~/.simplebill/ directory")
 	fmt.Println("  invoice <customer> <product:qty>  Generate an invoice")
 	fmt.Println("  list                              List all invoices")
-}
-
-func runInvoice(args []string) error {
-	fmt.Println("invoice command not implemented")
-	return nil
 }
 
 func runList() error {

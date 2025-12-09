@@ -24,10 +24,11 @@ type Company struct {
 }
 
 type InvoiceConfig struct {
-	Prefix       string `yaml:"prefix"`
-	PaymentTerms string `yaml:"payment_terms"`
-	DueDays      int    `yaml:"due_days"`
-	Notes        string `yaml:"notes"`
+	Prefix         string `yaml:"prefix"`
+	StartingNumber string `yaml:"starting_number"`
+	PaymentTerms   string `yaml:"payment_terms"`
+	DueDays        int    `yaml:"due_days"`
+	Notes          string `yaml:"notes"`
 }
 
 type Customer struct {

@@ -23,6 +23,7 @@ var defaultConfig = `company:
 
 invoice:
   prefix: "INV"
+  starting_number: "0000"  # set to last invoice number (next will be +1)
   payment_terms: "Net 14"
   due_days: 14
   notes: "Thank you for your business!"
