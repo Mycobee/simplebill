@@ -11,7 +11,9 @@ I got tired of copy-pasting Excel invoices like a caveman. I didn't want to pay 
 
 ## Install
 
-TODO
+Download the latest binary from [Releases](https://github.com/mycobee/simplebill/releases) and add it to your PATH.
+
+> **Windows:** Builds are provided but untested. YMMV.
 
 ## Setup
 
@@ -63,6 +65,9 @@ sudo apt install wkhtmltopdf
 
 # Fedora
 sudo dnf install wkhtmltopdf
+
+# Windows
+# Download installer from https://wkhtmltopdf.org/downloads.html
 ```
 
 ## Contributing
