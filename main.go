@@ -15,6 +15,9 @@ func main() {
 
 	var err error
 	switch os.Args[1] {
+	case "-h", "--help", "help":
+		printUsage()
+		return
 	case "init":
 		err = cmd.RunInit()
 	case "invoice":
