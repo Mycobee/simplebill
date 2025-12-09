@@ -10,9 +10,10 @@ import (
 )
 
 type Config struct {
-	Company    Company       `yaml:"company"`
-	Invoice    InvoiceConfig `yaml:"invoice"`
-	AutoCommit bool          `yaml:"auto_commit"`
+	Company         Company       `yaml:"company"`
+	Invoice         InvoiceConfig `yaml:"invoice"`
+	AutoCommit      bool          `yaml:"auto_commit"`
+	SkipUpdateCheck bool          `yaml:"skip_update_check"`
 }
 
 type Company struct {

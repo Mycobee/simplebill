@@ -32,6 +32,16 @@ jobs:
         with:
           go-version: '1.21'
 
+      - name: Check version matches tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          CODE_VERSION=$(grep 'const Version' main.go | sed 's/.*"\(.*\)"/\1/')
+          if [ "$TAG" != "$CODE_VERSION" ]; then
+            echo "ERROR: Tag v$TAG does not match code version $CODE_VERSION"
+            echo "Update 'const Version' in main.go before releasing"
+            exit 1
+          fi
+
       - name: Build
         env:
           GOOS: ${{ matrix.goos }}

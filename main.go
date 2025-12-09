@@ -7,7 +7,11 @@ import (
 	"simplebill/cmd"
 )
 
+const Version = "0.1.0"
+
 func main() {
+	cmd.CheckForUpdate(Version)
+
 	if len(os.Args) < 2 {
 		printUsage()
 		os.Exit(1)
@@ -17,6 +21,9 @@ func main() {
 	switch os.Args[1] {
 	case "-h", "--help", "help":
 		printUsage()
+		return
+	case "-v", "--version", "version":
+		fmt.Printf("simplebill %s\n", Version)
 		return
 	case "init":
 		err = cmd.RunInit()

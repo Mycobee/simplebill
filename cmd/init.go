@@ -30,6 +30,9 @@ invoice:
 
 # If true and ~/.simplebill is a git repo, auto-commit after changes
 auto_commit: false
+
+# Suppress update check warnings
+skip_update_check: false
 `
 
 var defaultCustomers = `# Add customers here. The key (e.g., "acme") is used on the command line.
