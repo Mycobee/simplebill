@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"simplebill/internal/config"
 )
 
 //go:embed templates/*
@@ -24,6 +26,9 @@ invoice:
   payment_terms: "Net 14"
   due_days: 14
   notes: "Thank you for your business!"
+
+# If true and ~/.simplebill is a git repo, auto-commit after changes
+auto_commit: false
 `
 
 var defaultCustomers = `# Add customers here. The key (e.g., "acme") is used on the command line.
@@ -87,5 +92,7 @@ func RunInit() error {
 
 	fmt.Printf("Created %s\n", dir)
 	fmt.Println("Edit your config files there, then run: simplebill invoice <customer> <product:qty>")
+
+	config.AutoCommit("simplebill: initialized")
 	return nil
 }
