@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"simplebill/cmd"
 )
 
 func main() {
@@ -11,16 +13,22 @@ func main() {
 		os.Exit(1)
 	}
 
+	var err error
 	switch os.Args[1] {
 	case "init":
-		runInit()
+		err = cmd.RunInit()
 	case "invoice":
-		runInvoice(os.Args[2:])
+		err = runInvoice(os.Args[2:])
 	case "list":
-		runList()
+		err = runList()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", os.Args[1])
 		printUsage()
+		os.Exit(1)
+	}
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 		os.Exit(1)
 	}
 }
@@ -34,14 +42,12 @@ func printUsage() {
 	fmt.Println("  list                              List all invoices")
 }
 
-func runInit() {
-	fmt.Println("init command not implemented")
-}
-
-func runInvoice(args []string) {
+func runInvoice(args []string) error {
 	fmt.Println("invoice command not implemented")
+	return nil
 }
 
-func runList() {
+func runList() error {
 	fmt.Println("list command not implemented")
+	return nil
 }
