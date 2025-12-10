@@ -16,7 +16,6 @@ type Invoice struct {
 	InvoiceNumber string    `yaml:"invoice_number"`
 	Date          string    `yaml:"date"`
 	DueDate       string    `yaml:"due_date"`
-	Status        string    `yaml:"status"`
 	Customer      string    `yaml:"customer"`
 	Items         []Item    `yaml:"items"`
 	Total         float64   `yaml:"total"`

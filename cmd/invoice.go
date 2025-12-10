@@ -96,7 +96,6 @@ func RunInvoice(args []string) error {
 		InvoiceNumber: invNumber,
 		Date:          now.Format("2006-01-02"),
 		DueDate:       dueDate.Format("2006-01-02"),
-		Status:        "draft",
 		Customer:      customerKey,
 		Items:         items,
 		Total:         total,

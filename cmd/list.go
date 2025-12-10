@@ -86,8 +86,8 @@ func listInvoices() error {
 		if c, ok := customers[inv.Customer]; ok {
 			customerName = c.Name
 		}
-		fmt.Printf("%-15s  %s  %-30s  $%7.2f  %s\n",
-			inv.InvoiceNumber, inv.Date, customerName, inv.Total, inv.Status)
+		fmt.Printf("%-15s  %s  %-30s  $%7.2f\n",
+			inv.InvoiceNumber, inv.Date, customerName, inv.Total)
 	}
 
 	return nil
