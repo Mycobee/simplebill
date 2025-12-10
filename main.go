@@ -31,6 +31,8 @@ func main() {
 		err = cmd.RunInvoice(os.Args[2:])
 	case "list":
 		err = cmd.RunList(os.Args[2:])
+	case "delete":
+		err = cmd.RunDelete(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", os.Args[1])
 		printUsage()
@@ -50,5 +52,6 @@ func printUsage() {
 	fmt.Println("  init                              Initialize ~/.simplebill/ directory")
 	fmt.Println("  invoice <customer> <product:qty>  Generate an invoice")
 	fmt.Println("  list [invoices|customers|products|config]")
+	fmt.Println("  delete <invoice-number>           Delete an invoice")
 }
 
