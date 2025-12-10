@@ -2,80 +2,144 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @media print {
-            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            padding: 0;
+            max-width: 100%;
+            margin: 0;
+        }
+        .header { display: table; width: 100%; margin-bottom: 40px; }
+        .header-left { display: table-cell; vertical-align: top; }
+        .header-right { display: table-cell; vertical-align: top; text-align: right; }
+        .company-name { font-size: 28px; font-weight: bold; color: #1a1a1a; margin-bottom: 8px; }
+        .company-info { color: #666; white-space: pre-line; }
+        .invoice-title { font-size: 26px; font-weight: bold; color: #1a1a1a; }
+        .invoice-number { color: #666; margin-bottom: 10px; }
+        .invoice-dates { color: #666; }
+
+        .bill-to { margin-bottom: 30px; }
+        .bill-to-label { font-weight: bold; color: #555; margin-bottom: 5px; }
+        .customer-name { font-weight: 600; color: #1a1a1a; }
+        .customer-info { color: #666; white-space: pre-line; }
+
+        .payment-terms { color: #666; margin-bottom: 30px; }
+        .payment-terms strong { color: #555; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        th {
+            text-align: left;
+            padding: 14px 10px;
+            border-bottom: 2px solid #ddd;
+            color: #555;
+            font-weight: 600;
+        }
+        th.right { text-align: right; }
+        td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        td.right { text-align: right; }
+        td.sku { color: #888; }
+        tfoot td {
+            padding: 16px 10px;
+            border-top: 2px solid #ddd;
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .notes {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .notes-label { font-weight: bold; color: #555; margin-bottom: 5px; }
+        .notes-text { color: #666; }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            margin-top: 60px;
         }
     </style>
 </head>
-<body class="bg-white p-8 max-w-4xl mx-auto text-sm">
-    <div class="flex justify-between mb-8">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">{{.Company.Name}}</h1>
-            <p class="text-gray-600">{{.Company.Address}}</p>
-            {{if .Company.ID}}<p class="text-gray-600">{{.Company.ID}}</p>{{end}}
-            <p class="text-gray-600">{{.Company.Email}}</p>
-            {{if .Company.Phone}}<p class="text-gray-600">{{.Company.Phone}}</p>{{end}}
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="company-name">{{.Company.Name}}</div>
+            <div class="company-info">{{.Company.Address}}</div>
+            {{if .Company.ID}}<div class="company-info">{{.Company.ID}}</div>{{end}}
+            <div class="company-info">{{.Company.Email}}</div>
+            {{if .Company.Phone}}<div class="company-info">{{.Company.Phone}}</div>{{end}}
         </div>
-        <div class="text-right">
-            <h2 class="text-xl font-bold text-gray-800">INVOICE</h2>
-            <p class="text-gray-600">{{.InvoiceNumber}}</p>
-            <p class="text-gray-600 mt-2">Date: {{.Date}}</p>
-            <p class="text-gray-600">Due: {{.DueDate}}</p>
+        <div class="header-right">
+            <div class="invoice-title">INVOICE</div>
+            <div class="invoice-number">{{.InvoiceNumber}}</div>
+            <div class="invoice-dates">Date: {{.Date}}</div>
+            <div class="invoice-dates">Due: {{.DueDate}}</div>
         </div>
     </div>
 
-    <div class="mb-8">
-        <h3 class="font-bold text-gray-700 mb-1">Bill To:</h3>
-        <p class="text-gray-800 font-medium">{{.Customer.Name}}</p>
-        <p class="text-gray-600">{{.Customer.Address}}</p>
-        {{if .Customer.ID}}<p class="text-gray-600">{{.Customer.ID}}</p>{{end}}
-        {{if .Customer.Email}}<p class="text-gray-600">{{.Customer.Email}}</p>{{end}}
-        {{if .Customer.Phone}}<p class="text-gray-600">{{.Customer.Phone}}</p>{{end}}
+    <div class="bill-to">
+        <div class="bill-to-label">Bill To:</div>
+        <div class="customer-name">{{.Customer.Name}}</div>
+        <div class="customer-info">{{.Customer.Address}}</div>
+        {{if .Customer.ID}}<div class="customer-info">{{.Customer.ID}}</div>{{end}}
+        {{if .Customer.Email}}<div class="customer-info">{{.Customer.Email}}</div>{{end}}
+        {{if .Customer.Phone}}<div class="customer-info">{{.Customer.Phone}}</div>{{end}}
     </div>
 
-    <div class="mb-2">
-        <p class="text-gray-600"><span class="font-medium">Payment Terms:</span> {{.PaymentTerms}}</p>
+    <div class="payment-terms">
+        <strong>Payment Terms:</strong> {{.PaymentTerms}}
     </div>
 
-    <table class="w-full mb-8">
+    <table>
         <thead>
-            <tr class="border-b-2 border-gray-300">
-                <th class="text-left py-2 text-gray-700">Item</th>
-                <th class="text-left py-2 text-gray-700">SKU</th>
-                <th class="text-right py-2 text-gray-700">Qty</th>
-                <th class="text-right py-2 text-gray-700">Price</th>
-                <th class="text-right py-2 text-gray-700">Total</th>
+            <tr>
+                <th>Item</th>
+                <th>SKU</th>
+                <th class="right">Qty</th>
+                <th class="right">Price</th>
+                <th class="right">Total</th>
             </tr>
         </thead>
         <tbody>
             {{range .Items}}
-            <tr class="border-b border-gray-200">
-                <td class="py-2 text-gray-800">{{.Name}}</td>
-                <td class="py-2 text-gray-600">{{.SKU}}</td>
-                <td class="py-2 text-right text-gray-800">{{.Quantity}}</td>
-                <td class="py-2 text-right text-gray-800">${{printf "%.2f" .Price}}</td>
-                <td class="py-2 text-right text-gray-800">${{printf "%.2f" .Total}}</td>
+            <tr>
+                <td>{{.Name}}</td>
+                <td class="sku">{{.SKU}}</td>
+                <td class="right">{{.Quantity}}</td>
+                <td class="right">${{printf "%.2f" .Price}}</td>
+                <td class="right">${{printf "%.2f" .Total}}</td>
             </tr>
             {{end}}
         </tbody>
         <tfoot>
-            <tr class="border-t-2 border-gray-300">
-                <td colspan="4" class="py-3 text-right font-bold text-gray-800">Total:</td>
-                <td class="py-3 text-right font-bold text-gray-800">${{printf "%.2f" .Total}}</td>
+            <tr>
+                <td colspan="4" class="right">Total:</td>
+                <td class="right">${{printf "%.2f" .Total}}</td>
             </tr>
         </tfoot>
     </table>
 
     {{if .Notes}}
-    <div class="mb-8 p-4 bg-gray-50 rounded">
-        <h3 class="font-bold text-gray-700 mb-1">Notes:</h3>
-        <p class="text-gray-600">{{.Notes}}</p>
+    <div class="notes">
+        <div class="notes-label">Notes:</div>
+        <div class="notes-text">{{.Notes}}</div>
     </div>
     {{end}}
 
-    <div class="text-center text-gray-500 text-xs mt-16 pt-4 border-t border-gray-200">
+    <div class="footer">
         {{.Company.Name}}
     </div>
 </body>
