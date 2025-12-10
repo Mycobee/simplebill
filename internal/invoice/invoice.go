@@ -27,6 +27,7 @@ type Item struct {
 	Quantity  int     `yaml:"quantity"`
 	UnitPrice float64 `yaml:"unit_price"`
 	Total     float64 `yaml:"total"`
+	Discount  int     `yaml:"discount,omitempty"`
 }
 
 // NextNumber determines the next invoice number based on existing invoices or starting_number

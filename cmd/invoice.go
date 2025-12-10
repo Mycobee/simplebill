@@ -12,13 +12,35 @@ import (
 	"simplebill/internal/invoice"
 )
 
+func printInvoiceHelp() {
+	fmt.Println("Usage: simplebill invoice <customer> <product:qty[:discount]>... [-y]")
+	fmt.Println()
+	fmt.Println("Generate a PDF invoice for a customer.")
+	fmt.Println()
+	fmt.Println("Arguments:")
+	fmt.Println("  customer              Customer key from customers.yml")
+	fmt.Println("  product:qty           Product key and quantity (e.g., widget:10)")
+	fmt.Println("  product:qty:discount  Product with percentage discount (e.g., widget:1:25 for 25% off)")
+	fmt.Println()
+	fmt.Println("Options:")
+	fmt.Println("  -y, --yes    Skip preview and save immediately")
+	fmt.Println("  -h, --help   Show this help message")
+	fmt.Println()
+	fmt.Println("Examples:")
+	fmt.Println("  simplebill invoice acme widget:10")
+	fmt.Println("  simplebill invoice acme widget:5 widget:1:25 gadget:3 -y")
+}
+
 func RunInvoice(args []string) error {
-	// Check for -y flag
+	// Check for flags
 	skipPreview := false
 	var filteredArgs []string
 	for _, arg := range args {
 		if arg == "-y" || arg == "--yes" {
 			skipPreview = true
+		} else if arg == "-h" || arg == "--help" {
+			printInvoiceHelp()
+			return nil
 		} else {
 			filteredArgs = append(filteredArgs, arg)
 		}
@@ -26,7 +48,8 @@ func RunInvoice(args []string) error {
 	args = filteredArgs
 
 	if len(args) < 2 {
-		return fmt.Errorf("usage: simplebill invoice <customer> <product:qty> [product:qty...] [-y]")
+		printInvoiceHelp()
+		return nil
 	}
 
 	cfg, err := config.Load()
@@ -57,8 +80,8 @@ func RunInvoice(args []string) error {
 
 	for _, arg := range args[1:] {
 		parts := strings.Split(arg, ":")
-		if len(parts) != 2 {
-			return fmt.Errorf("invalid format '%s', expected product:quantity", arg)
+		if len(parts) < 2 || len(parts) > 3 {
+			return fmt.Errorf("invalid format '%s', expected product:quantity or product:quantity:discount", arg)
 		}
 
 		productKey := parts[0]
@@ -67,17 +90,30 @@ func RunInvoice(args []string) error {
 			return fmt.Errorf("invalid quantity '%s' for product '%s'", parts[1], productKey)
 		}
 
+		var discount int
+		if len(parts) == 3 {
+			discount, err = strconv.Atoi(parts[2])
+			if err != nil || discount < 0 || discount > 100 {
+				return fmt.Errorf("invalid discount '%s' for product '%s', expected 0-100", parts[2], productKey)
+			}
+		}
+
 		product, ok := products[productKey]
 		if !ok {
 			return fmt.Errorf("product '%s' not found in products.yml", productKey)
 		}
 
-		itemTotal := product.Price * float64(qty)
+		unitPrice := product.Price
+		if discount > 0 {
+			unitPrice = product.Price * (1 - float64(discount)/100)
+		}
+		itemTotal := unitPrice * float64(qty)
 		items = append(items, invoice.Item{
 			Product:   productKey,
 			Quantity:  qty,
-			UnitPrice: product.Price,
+			UnitPrice: unitPrice,
 			Total:     itemTotal,
+			Discount:  discount,
 		})
 		total += itemTotal
 	}

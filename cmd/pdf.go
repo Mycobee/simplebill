@@ -39,8 +39,12 @@ func buildTemplateData(inv *invoice.Invoice, cfg *config.Config, customer *confi
 	var items []TemplateItem
 	for _, item := range inv.Items {
 		prod := products[item.Product]
+		name := prod.Name
+		if item.Discount > 0 {
+			name = fmt.Sprintf("%s (%d%% off)", prod.Name, item.Discount)
+		}
 		items = append(items, TemplateItem{
-			Name:     prod.Name,
+			Name:     name,
 			SKU:      prod.SKU,
 			Quantity: item.Quantity,
 			Price:    item.UnitPrice,
