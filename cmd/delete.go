@@ -10,9 +10,27 @@ import (
 	"simplebill/internal/config"
 )
 
+func printDeleteHelp() {
+	fmt.Println("Usage: simplebill delete <invoice-number> [--confirm]")
+	fmt.Println()
+	fmt.Println("Delete an invoice (both .yml and .pdf files).")
+	fmt.Println()
+	fmt.Println("Arguments:")
+	fmt.Println("  invoice-number   Invoice number to delete (e.g., INV-2025-0001)")
+	fmt.Println()
+	fmt.Println("Options:")
+	fmt.Println("  -y, --confirm    Skip confirmation prompt")
+	fmt.Println("  -h, --help       Show this help message")
+	fmt.Println()
+	fmt.Println("Examples:")
+	fmt.Println("  simplebill delete INV-2025-0001")
+	fmt.Println("  simplebill delete INV-2025-0001 --confirm")
+}
+
 func RunDelete(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: simplebill delete <invoice-number> [--confirm]")
+		printDeleteHelp()
+		return nil
 	}
 
 	var invoiceNumber string
@@ -21,13 +39,17 @@ func RunDelete(args []string) error {
 	for _, arg := range args {
 		if arg == "--confirm" || arg == "-y" {
 			confirmed = true
+		} else if arg == "-h" || arg == "--help" {
+			printDeleteHelp()
+			return nil
 		} else {
 			invoiceNumber = arg
 		}
 	}
 
 	if invoiceNumber == "" {
-		return fmt.Errorf("usage: simplebill delete <invoice-number> [--confirm]")
+		printDeleteHelp()
+		return nil
 	}
 
 	dir, err := config.Dir()

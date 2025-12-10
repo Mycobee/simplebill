@@ -12,12 +12,34 @@ import (
 	"simplebill/internal/invoice"
 )
 
+func printListHelp() {
+	fmt.Println("Usage: simplebill list [type]")
+	fmt.Println()
+	fmt.Println("List invoices, customers, products, or config.")
+	fmt.Println()
+	fmt.Println("Types:")
+	fmt.Println("  invoices    List all invoices (default)")
+	fmt.Println("  customers   List all customers")
+	fmt.Println("  products    List all products")
+	fmt.Println("  config      Show current configuration")
+	fmt.Println()
+	fmt.Println("Options:")
+	fmt.Println("  -h, --help  Show this help message")
+	fmt.Println()
+	fmt.Println("Examples:")
+	fmt.Println("  simplebill list")
+	fmt.Println("  simplebill list customers")
+}
+
 func RunList(args []string) error {
 	if len(args) == 0 {
 		return listInvoices()
 	}
 
 	switch args[0] {
+	case "-h", "--help":
+		printListHelp()
+		return nil
 	case "invoices":
 		return listInvoices()
 	case "customers":
