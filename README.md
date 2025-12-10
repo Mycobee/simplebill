@@ -43,6 +43,21 @@ simplebill invoice acme widget:10 gizmo:5
 simplebill invoice acme widget:10 -y
 ```
 
+Add a percentage discount to an item with `product:qty:discount`:
+
+```bash
+simplebill invoice acme widget:5 widget:1:25 gizmo:3
+```
+
+This creates 5 widgets at full price, 1 widget at 25% off, and 3 gizmos.
+
+#### Delete an invoice
+
+```bash
+simplebill delete <invoice-number>
+simplebill delete INV-2025-0001 --confirm  # skip confirmation prompt
+```
+
 ### List data
 
 ```bash
@@ -50,6 +65,16 @@ simplebill list              # invoices (default)
 simplebill list customers
 simplebill list products
 simplebill list config
+```
+
+### Getting help
+
+All commands and subcommands have a help flag that can be passed for more information
+
+```bash
+simplebill invoice --help
+simplebill delete -h
+simplebill -h
 ```
 
 ## Dependencies

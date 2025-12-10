@@ -51,7 +51,7 @@ func printUsage() {
 	fmt.Println("Commands:")
 	fmt.Println("  init                              Initialize ~/.simplebill/ directory")
 	fmt.Println("  invoice <customer> <product:qty>  Generate an invoice")
-	fmt.Println("  list [invoices|customers|products|config]")
+	fmt.Println("  list [type]                       List data (default: invoices)")
 	fmt.Println("  delete <invoice-number>           Delete an invoice")
 }
 
