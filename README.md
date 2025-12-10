@@ -1,6 +1,6 @@
 # simplebill
 
-I got tired of copy-pasting Excel invoices like a caveman. I didn't want to pay for invoicing software or self-host some "freemium" product masquerading as free and open source. I just wanted to send a bill. So I built this.
+I got tired of copy-pasting Excel invoices like a caveman. I didn't want to pay for invoicing software or self-host some "freemium" product masquerading as free and open source. I just wanted to send invoices easily. So I built this.
 
 `simplebill` turns YAML files + an HTML template into clean PDF invoices. No cloud apps, no subscriptions, no vendor lock-in. Just your terminal.
 
