@@ -51,6 +51,13 @@ simplebill invoice acme widget:5 widget:1:25 gizmo:3
 
 This creates 5 widgets at full price, 1 widget at 25% off, and 3 gizmos.
 
+Override the price for an item with `product:qty:discount:@price`:
+
+```bash
+simplebill invoice acme widget:10:0:@15.00
+simplebill invoice acme widget:10:25:@20.00  # 25% off $20.00
+```
+
 #### Delete an invoice
 
 ```bash

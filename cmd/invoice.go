@@ -13,14 +13,15 @@ import (
 )
 
 func printInvoiceHelp() {
-	fmt.Println("Usage: simplebill invoice <customer> <product:qty[:discount]>... [-y]")
+	fmt.Println("Usage: simplebill invoice <customer> <product:qty[:discount[:@price]]>... [-y]")
 	fmt.Println()
 	fmt.Println("Generate a PDF invoice for a customer.")
 	fmt.Println()
 	fmt.Println("Arguments:")
-	fmt.Println("  customer              Customer key from customers.yml")
-	fmt.Println("  product:qty           Product key and quantity (e.g., widget:10)")
-	fmt.Println("  product:qty:discount  Product with percentage discount (e.g., widget:1:25 for 25% off)")
+	fmt.Println("  customer                     Customer key from customers.yml")
+	fmt.Println("  product:qty                  Product key and quantity (e.g., widget:10)")
+	fmt.Println("  product:qty:discount         Percentage discount (e.g., widget:1:25 for 25% off)")
+	fmt.Println("  product:qty:discount:@price  Custom price with optional discount (e.g., widget:1:0:@15.00)")
 	fmt.Println()
 	fmt.Println("Options:")
 	fmt.Println("  -y, --yes    Skip preview and save immediately")
@@ -29,6 +30,7 @@ func printInvoiceHelp() {
 	fmt.Println("Examples:")
 	fmt.Println("  simplebill invoice acme widget:10")
 	fmt.Println("  simplebill invoice acme widget:5 widget:1:25 gadget:3 -y")
+	fmt.Println("  simplebill invoice acme widget:10:0:@15.00")
 }
 
 func RunInvoice(args []string) error {
@@ -80,8 +82,8 @@ func RunInvoice(args []string) error {
 
 	for _, arg := range args[1:] {
 		parts := strings.Split(arg, ":")
-		if len(parts) < 2 || len(parts) > 3 {
-			return fmt.Errorf("invalid format '%s', expected product:quantity or product:quantity:discount", arg)
+		if len(parts) < 2 || len(parts) > 4 {
+			return fmt.Errorf("invalid format '%s', expected product:qty or product:qty:discount or product:qty:discount:@price", arg)
 		}
 
 		productKey := parts[0]
@@ -91,10 +93,22 @@ func RunInvoice(args []string) error {
 		}
 
 		var discount int
-		if len(parts) == 3 {
+		if len(parts) >= 3 {
 			discount, err = strconv.Atoi(parts[2])
 			if err != nil || discount < 0 || discount > 100 {
 				return fmt.Errorf("invalid discount '%s' for product '%s', expected 0-100", parts[2], productKey)
+			}
+		}
+
+		var customPrice float64
+		if len(parts) == 4 {
+			priceStr := parts[3]
+			if !strings.HasPrefix(priceStr, "@") {
+				return fmt.Errorf("invalid price '%s' for product '%s', expected @price (e.g., @15.00)", priceStr, productKey)
+			}
+			customPrice, err = strconv.ParseFloat(priceStr[1:], 64)
+			if err != nil || customPrice < 0 {
+				return fmt.Errorf("invalid price '%s' for product '%s'", priceStr, productKey)
 			}
 		}
 
@@ -103,9 +117,13 @@ func RunInvoice(args []string) error {
 			return fmt.Errorf("product '%s' not found in products.yml", productKey)
 		}
 
-		unitPrice := product.Price
+		basePrice := product.Price
+		if customPrice > 0 {
+			basePrice = customPrice
+		}
+		unitPrice := basePrice
 		if discount > 0 {
-			unitPrice = product.Price * (1 - float64(discount)/100)
+			unitPrice = basePrice * (1 - float64(discount)/100)
 		}
 		itemTotal := unitPrice * float64(qty)
 		items = append(items, invoice.Item{
