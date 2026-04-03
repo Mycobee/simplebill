@@ -118,7 +118,7 @@ func RunInvoice(args []string) error {
 		}
 
 		basePrice := product.Price
-		if customPrice > 0 {
+		if len(parts) == 4 && strings.HasPrefix(parts[3], "@") {
 			basePrice = customPrice
 		}
 		unitPrice := basePrice
